@@ -33,12 +33,12 @@ export class AuthService {
       });
 
       if (!user) {
-        throw new NotFoundException('Invalid email');
+        throw new BadRequestException('Invalid email');
       }
 
       const isPasswordValid = await bcrypt.compare(signinDto.password, user.password);
       if (!isPasswordValid) {
-        throw new UnauthorizedException('Invalid password');
+        throw new BadRequestException('Invalid password');
       }
 
       const payload = { email: user.email, id: user.id };
@@ -47,7 +47,7 @@ export class AuthService {
         access_token: this.jwtService.sign(payload, { secret: process.env.JWT_SECRET }),
       };
     } catch (error) {
-      if (error instanceof UnauthorizedException || error instanceof NotFoundException) {
+      if (error instanceof BadRequestException || error instanceof NotFoundException) {
         throw error;
       }
       throw new InternalServerErrorException('Failed to sign in');

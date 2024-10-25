@@ -48,11 +48,6 @@ export class MovieController {
     );
   }
 
-  @Get(':id')
-  getMovieById(@Param('id') movieId: number, @Request() req) {
-    return this.movieService.getMovieById(+movieId, req.user.id);
-  }
-
   @Get()
   getAllMovies(
     @Request() req,

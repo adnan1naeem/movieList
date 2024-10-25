@@ -15,6 +15,9 @@ export class MovieService {
     createMovieDto: CreateMovieDto,
     file: Express.Multer.File,
   ) {
+
+    console.log('data', userId, createMovieDto, file, typeof userId);
+    
     let imageUrl = '';
 
     // Upload image if file exists
@@ -25,7 +28,7 @@ export class MovieService {
     return this.prisma.movie.create({
       data: {
         title: createMovieDto.title,
-        publishingYear: createMovieDto.publishingYear,
+        publishingYear: +createMovieDto.publishingYear,
         imageUrl: imageUrl,
         userId: userId,
       },
@@ -58,8 +61,10 @@ export class MovieService {
     return this.prisma.movie.update({
       where: { id: movieId },
       data: {
-        ...updateMovieDto,
+        publishingYear: +updateMovieDto.publishingYear,
         imageUrl: imageUrl,
+        title: updateMovieDto.title,
+        userId: userId,
       },
     });
   }
